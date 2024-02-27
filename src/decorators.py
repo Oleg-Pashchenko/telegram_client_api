@@ -13,7 +13,7 @@ async def request_processing(func):
         start_time = time.time()
         print('wrapped')
         try:
-            data = json.loads(await request.text())
+            data = dict(json.loads(await request.text()))
 
             answer = await func(data)
             status = True
