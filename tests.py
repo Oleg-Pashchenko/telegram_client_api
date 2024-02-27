@@ -1,6 +1,6 @@
 import requests
 
-host = 'http://0.0.0.0:5003'
+host = 'http://telegram.api.olegpash.tech'
 
 
 def send_sms_code(app_id: int, tg_hash: str):
@@ -40,10 +40,10 @@ def test():
     api_hash = '6c677b0f0e2af14a53cbf0c0eafe5886'
     session_name = send_sms_code(api_id, api_hash)['answer']
     sms_code = input('Введите смс код: ')
-    auth_status = send_answer_to_sms_code(session_name, sms_code)
+    auth_status = send_answer_to_sms_code(session_name['session_name'], sms_code)
     if not auth_status['status']:
         secret_password = input('Введите секретный пароль: ')
-        status = send_answer_to_sms_code_with_2fa(session_name, secret_password)
+        status = send_answer_to_sms_code_with_2fa(session_name['session_name'], secret_password)
         print(session_name)
         if status['status']:
             print('Авторизация пройдена!')
@@ -56,4 +56,5 @@ def test():
 # auth_status = send_answer_to_sms_code_with_2fa('8383929', 'gelo23122003A!')
 #print(auth_status)
 
-print(get_updates('8383929'))
+# print(get_updates('8383929'))
+test()

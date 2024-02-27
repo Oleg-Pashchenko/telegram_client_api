@@ -31,13 +31,17 @@ class Tg:
     async def send_auth_code(self):
         response = await self.client.send_code_request(phone=self.phone)
         self.sms_hash = response.phone_code_hash
+        await self.client.disconnect()
 
     async def authorize_by_sms(self, sms_code: str):
         self.sms_code = sms_code
         try:
             await self.client.sign_in(phone=self.phone, code=sms_code, phone_code_hash=self.sms_hash)
         except (telethon.errors.rpcerrorlist.SessionPasswordNeededError, Exception) as auth_error:
+            await self.client.disconnect()
             return False
+        await self.client.disconnect()
+
         return True
 
     async def authorize_by_password(self, secret_password: str):
@@ -49,11 +53,18 @@ class Tg:
                 await self.client.sign_in(password=secret_password)
                 auth = self.is_connection_alive()
                 if not auth:
+                    await self.client.disconnect()
+
                     return False
             except Exception as e:
+                await self.client.disconnect()
+
                 return False
+            await self.client.disconnect()
 
             return False
+        await self.client.disconnect()
+
         return True
 
     async def get_updates(self):
