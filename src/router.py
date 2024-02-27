@@ -4,7 +4,20 @@ from aiohttp import web
 
 from src.methods import *
 
-app = web.Application()
+
+async def request_logger_middleware(app, handler):
+    async def middleware_handler(request):
+        print(f"Запрос: {request.method} {request.rel_url}")
+        # Для более детальной информации можно добавить:
+        print(f"Заголовки: {request.headers}")
+        print(f"Тело запроса: {await request.text()}")
+        response = await handler(request)
+        return response
+
+    return middleware_handler
+
+
+app = web.Application(middlewares=[request_logger_middleware])
 
 
 async def routers():

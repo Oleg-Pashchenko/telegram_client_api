@@ -2,6 +2,7 @@ import aiohttp_cors
 
 from src.router import web, app
 
+
 if __name__ == '__main__':
     cors = aiohttp_cors.setup(app, defaults={
         "*": aiohttp_cors.ResourceOptions(
