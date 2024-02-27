@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  telegram_client_api:
+    restart: always
+    build:
+      context: .
+    ports:
+      - "5003:5003"
