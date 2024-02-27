@@ -27,7 +27,7 @@ async def request_processing(func):
                 'answer': answer,
                 'execution_time': round(time.time() - start_time, 2)
             },
-            status=200 if status else 500
+            status=200
         )
 
     return wrapper
