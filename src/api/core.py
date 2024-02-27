@@ -19,7 +19,8 @@ class Tg:
         self.client = telethon.TelegramClient(f'src/api/sessions/{session_name}', api_id, api_hash)
 
     async def connect(self):
-        await self.client.connect()
+        if not self.client.is_connected():
+            await self.client.connect()
 
     async def is_connection_alive(self):
         try:
@@ -32,16 +33,13 @@ class Tg:
     async def send_auth_code(self):
         response = await self.client.send_code_request(phone=self.phone)
         self.sms_hash = response.phone_code_hash
-        await self.client.disconnect()
 
     async def authorize_by_sms(self, sms_code: str):
         self.sms_code = sms_code
         try:
             await self.client.sign_in(phone=self.phone, code=sms_code, phone_code_hash=self.sms_hash)
         except (telethon.errors.rpcerrorlist.SessionPasswordNeededError, Exception) as auth_error:
-            await self.client.disconnect()
             return False
-        await self.client.disconnect()
 
         return True
 
@@ -55,14 +53,11 @@ class Tg:
                 await self.client.sign_in(password=secret_password)
                 auth = self.is_connection_alive()
                 if not auth:
-                    await self.client.disconnect()
                     return False
             except Exception as e:
                 print(e, 'ae2')
-                await self.client.disconnect()
                 return False
 
-            await self.client.disconnect()
             return True
 
     async def get_updates(self):
@@ -86,5 +81,4 @@ class Tg:
                             print(f"Звонок в {dialog.name}")
                             print(dialog)
                     last_message_ids[group_id] = max(last_message_ids[group_id], message.id)
-        await self.client.disconnect()
         return answer

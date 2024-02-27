@@ -3,6 +3,7 @@ import requests
 host = 'http://telegram.api.olegpash.tech'
 host = 'http://0.0.0.0:5003'
 
+
 def send_sms_code(app_id: int, tg_hash: str):
     return requests.post(f'{host}/send-telegram-code/',
                          json={
@@ -56,7 +57,8 @@ def test():
 # auth_status = send_answer_to_sms_code('8383929', '37668')
 # print(auth_status)
 # auth_status = send_answer_to_sms_code_with_2fa('8383929', 'gelo23122003A!')
-#print(auth_status)
+# print(auth_status)
 
-# print(get_updates('8383929'))
+# while True:
+#    print(get_updates('9873817'))
 test()
