@@ -1,7 +1,7 @@
 import requests
 
 host = 'http://telegram.api.olegpash.tech'
-
+host = 'http://0.0.0.0:5003'
 
 def send_sms_code(app_id: int, tg_hash: str):
     return requests.post(f'{host}/send-telegram-code/',
@@ -21,6 +21,7 @@ def send_answer_to_sms_code(session_name, sms_code):
 
 
 def send_answer_to_sms_code_with_2fa(session_name, secret_password):
+    print(session_name, secret_password)
     return requests.post(f'{host}/auth-with-2fa/',
                          json={
                              'session_name': session_name,
@@ -41,6 +42,7 @@ def test():
     session_name = send_sms_code(api_id, api_hash)['answer']
     sms_code = input('Введите смс код: ')
     auth_status = send_answer_to_sms_code(session_name['session_name'], sms_code)
+    print(auth_status)
     if not auth_status['status']:
         secret_password = input('Введите секретный пароль: ')
         status = send_answer_to_sms_code_with_2fa(session_name['session_name'], secret_password)

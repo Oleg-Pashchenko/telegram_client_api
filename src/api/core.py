@@ -25,7 +25,8 @@ class Tg:
         try:
             await self.client.get_me()
             return True
-        except:
+        except Exception as e:
+            print('is_c_a', e)
             return False
 
     async def send_auth_code(self):
@@ -49,23 +50,20 @@ class Tg:
         try:
             await self.client.sign_in(phone=self.phone, code=self.sms_code, phone_code_hash=self.sms_hash)
         except telethon.errors.rpcerrorlist.SessionPasswordNeededError as auth_error:
+            print(auth_error, 'ae')
             try:
                 await self.client.sign_in(password=secret_password)
                 auth = self.is_connection_alive()
                 if not auth:
                     await self.client.disconnect()
-
                     return False
             except Exception as e:
+                print(e, 'ae2')
                 await self.client.disconnect()
-
                 return False
+
             await self.client.disconnect()
-
-            return False
-        await self.client.disconnect()
-
-        return True
+            return True
 
     async def get_updates(self):
         answer = {'calls': [], 'messages': []}
