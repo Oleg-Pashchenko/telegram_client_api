@@ -58,7 +58,7 @@ def test():
 # print(auth_status)
 # auth_status = send_answer_to_sms_code_with_2fa('8383929', 'gelo23122003A!')
 # print(auth_status)
-
+# test()
 while True:
-    print(get_updates('6105195'))
+    print(get_updates('1514241'))
 # test()

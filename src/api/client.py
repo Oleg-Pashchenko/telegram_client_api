@@ -17,6 +17,7 @@ async def send_telegram_code(data: TelegramCodeData):
     await tg.connect()
     await tg.send_auth_code()
     save_tg_entity(tg)
+    await tg.client.disconnect()
     return {'session_name': session_name}
 
 
@@ -26,6 +27,8 @@ async def try_auth(data: AuthData):
     response = await tg.authorize_by_sms(data.sms_code)
     save_tg_entity(tg)
     print(response)
+    await tg.client.disconnect()
+
     if not response:
         raise AuthorizationError("Подключена 2FA")
     return response
@@ -38,6 +41,8 @@ async def try_auth_with_2fa(data: AuthWith2FAData):
     response = await tg.authorize_by_password(data.secret_password)
     print(response)
     save_tg_entity(tg)
+    await tg.client.disconnect()
+
     if not response:
         raise AuthorizationError("Некорректный пароль от 2FA или SMS Code!")
     return response
