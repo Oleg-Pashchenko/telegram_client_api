@@ -7,6 +7,7 @@ from src.api import client
 async def send_telegram_code_handler(data: dict):
     print(data)
     data = TelegramCodeData(**data)
+    print(data)
     return await client.send_telegram_code(data)
 
 
