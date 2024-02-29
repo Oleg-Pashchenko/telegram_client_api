@@ -76,6 +76,7 @@ class Tg:
                 if new_messages:
                     for message in reversed(new_messages):
                         time_difference = current_time - message.date
+                        print(message)
                         if isinstance(message.action, MessageActionGroupCall) and not message.action.duration and \
                                 time_difference < datetime.timedelta(minutes=3):
 
