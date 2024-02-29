@@ -50,7 +50,11 @@ async def try_auth_with_2fa(data: AuthWith2FAData):
 
 async def get_updates(data: GetUpdatesData):
     tg: Tg = get_tg_entity(data.session_name)
-    await tg.client.connect()
+    if tg.secret_password:
+        await tg.client.start(phone=tg.phone, password=tg.secret_password)
+    else:
+        await tg.client.start(phone=tg.phone)
+    print(await tg.client.get_me())
     response = await tg.get_updates()
     save_tg_entity(tg)
     await tg.client.disconnect()
