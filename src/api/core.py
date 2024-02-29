@@ -68,7 +68,6 @@ class Tg:
         current_time = datetime.datetime.now(datetime.timezone.utc)
 
         for dialog in all_groups:
-            print(dialog)
             if dialog.is_group:
                 group_id = dialog.id
                 new_messages = await self.client.get_messages(group_id, min_id=last_message_ids[group_id], limit=50)
