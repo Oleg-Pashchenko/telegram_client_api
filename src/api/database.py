@@ -56,7 +56,7 @@ def create_call(call_id, session_name):
 
 
 def is_call_exists(call_id, session_name):
-    query = "SELECT * FROM notifications WHERE session_name='%s' AND call_id=%s;"
+    query = "SELECT * FROM notifications WHERE session_name=%s AND call_id=%s;"
     row = execute_db_query(query, (session_name, call_id), fetch_one=True)
     return row is not None
 
