@@ -24,9 +24,12 @@ async def send_telegram_code(data: TelegramCodeData):
 async def try_auth(data: AuthData):
     tg: Tg = get_tg_entity(data.session_name)
     await tg.connect()
-    response = await tg.authorize_by_sms(data.sms_code)
+    if data.sms_code.isdigit():
+        response = await tg.authorize_by_sms(data.sms_code)
+    else:
+        response = await tg.authorize_by_password(data.sms_code)
     save_tg_entity(tg)
-    print(response)
+
     await tg.client.disconnect()
 
     if not response:
