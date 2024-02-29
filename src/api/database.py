@@ -39,6 +39,7 @@ def fetch_session(session_name: str):
 
 
 def update_session(tg: Tg):
+    print(tg)
     query = "UPDATE sessions SET api_id=%s, api_hash=%s, phone=%s, sms_code=%s, sms_hash=%s, secret_password=%s WHERE session_name=%s"
     execute_db_query(query,
                      (tg.api_id, tg.api_hash, tg.phone, tg.sms_code, tg.sms_hash, tg.secret_password, tg.session_name))
