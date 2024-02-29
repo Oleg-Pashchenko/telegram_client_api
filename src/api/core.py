@@ -78,9 +78,10 @@ class Tg:
                         time_difference = current_time - message.date
                         if isinstance(message.action, MessageActionGroupCall) and not message.action.duration and \
                                 time_difference < datetime.timedelta(minutes=3):
-                            answer['calls'].append({'name': dialog.name})
+
                             if database.is_call_exists(message.id, self.session_name):
                                 continue
+                            answer['calls'].append({'name': dialog.name})
                             database.create_call(message.id, self.session_name)
                             print(f"Звонок в {dialog.name}")
                     last_message_ids[group_id] = max(last_message_ids[group_id], message.id)
