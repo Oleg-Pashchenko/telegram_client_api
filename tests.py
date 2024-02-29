@@ -1,7 +1,7 @@
 import requests
 
-# host = 'http://telegram.api.olegpash.tech'
-host = 'http://0.0.0.0:5003'
+host = 'http://telegram.api.olegpash.tech'
+# host = 'http://0.0.0.0:5003'
 
 
 def send_sms_code(app_id: int, tg_hash: str):

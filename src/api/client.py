@@ -14,15 +14,10 @@ async def send_telegram_code(data: TelegramCodeData):
         session_name=session_name,
         phone=data.phone
     )
-    print(1)
     await tg.connect()
-    print(2)
     await tg.send_auth_code()
-    print(3)
     save_tg_entity(tg)
-    print(4)
     await tg.client.disconnect()
-    print(5)
     return {'session_name': session_name}
 
 

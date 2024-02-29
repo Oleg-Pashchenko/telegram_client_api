@@ -49,6 +49,25 @@ def create_session(tg: Tg):
     execute_db_query(query, (tg.api_id, tg.api_hash, tg.phone, tg.sms_hash, tg.session_name))
 
 
+def create_call():
+    query = "INSERT INTO notifiactions () VALUES (%s, %s, %s, %s);"
+    execute_db_query(query, ())
+
+
+def is_call_exists():
+    query = "SELECT * FROM notifications WHERE session_name=%s AND call_id=%s;"
+    row = execute_db_query(query, (), fetch_one=True)
+    return row is not None
+
+
+def delete_call_by_id():
+    query = "DELETE FROM notifications WHERE EXISTS (SELECT 1 FROM calls WHERE call_id=%s);"
+
+
+# Есть звонок появился - создаем его
+# Если звонок существует - говорим что он есть и уведомление не нужно
+# Если звонок завершился - удаляем его по call_Id
+
 def save_tg_entity(tg):
     session = fetch_session(tg.session_name)
     if not session:
