@@ -50,19 +50,15 @@ def create_session(tg: Tg):
     execute_db_query(query, (tg.api_id, tg.api_hash, tg.phone, tg.sms_hash, tg.session_name))
 
 
-def create_call():
-    query = "INSERT INTO notifiactions () VALUES (%s, %s, %s, %s);"
-    execute_db_query(query, ())
+def create_call(call_id, session_name):
+    query = "INSERT INTO notifications (call_id, session_name) VALUES (%s, %s);"
+    execute_db_query(query, (call_id, session_name))
 
 
-def is_call_exists():
+def is_call_exists(call_id, session_name):
     query = "SELECT * FROM notifications WHERE session_name=%s AND call_id=%s;"
-    row = execute_db_query(query, (), fetch_one=True)
+    row = execute_db_query(query, (call_id, session_name), fetch_one=True)
     return row is not None
-
-
-def delete_call_by_id():
-    query = "DELETE FROM notifications WHERE EXISTS (SELECT 1 FROM calls WHERE call_id=%s);"
 
 
 # Есть звонок появился - создаем его

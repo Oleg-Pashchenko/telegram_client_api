@@ -3,6 +3,7 @@ import datetime
 import telethon
 from telethon.tl.types import MessageActionGroupCall
 
+from src.api import database
 from src.api.exceptions import AuthorizationError
 
 
@@ -78,7 +79,9 @@ class Tg:
                         if isinstance(message.action, MessageActionGroupCall) and not message.action.duration and \
                                 time_difference < datetime.timedelta(minutes=3):
                             answer['calls'].append({'name': dialog.name})
+                            if database.is_call_exists(message.id, self.session_name):
+                                continue
+                            database.create_call(message.id, self.session_name)
                             print(f"Звонок в {dialog.name}")
-                            print(dialog)
                     last_message_ids[group_id] = max(last_message_ids[group_id], message.id)
         return answer
