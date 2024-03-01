@@ -17,7 +17,7 @@ class Tg:
         self.sms_code = sms_code
         self.sms_hash = sms_hash
         self.secret_password = secret_password
-        self.client = telethon.TelegramClient(f'src/api/sessions/{session_name}', api_id, api_hash, system_version="4.16.30-vxCUSTOM")
+        self.client = telethon.TelegramClient(f'src/api/sessions/{session_name}', api_id, api_hash, system_version="4.16.30-vxCUSTOM", auto_reconnect=True)
 
     async def connect(self):
         if not self.client.is_connected():
