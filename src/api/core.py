@@ -83,7 +83,7 @@ class Tg:
                             if database.is_call_exists(message.id, self.session_name):
                                 continue
                             answer['calls'].append({'name': dialog.name})
-                            database.create_call(message.id, self.session_name)
+                            database.create_call(message.action.call.id, self.session_name)
                             print(f"Звонок в {dialog.name}")
                     last_message_ids[group_id] = max(last_message_ids[group_id], message.id)
         return answer

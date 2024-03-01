@@ -61,10 +61,6 @@ def is_call_exists(call_id, session_name):
     return row is not None
 
 
-# Есть звонок появился - создаем его
-# Если звонок существует - говорим что он есть и уведомление не нужно
-# Если звонок завершился - удаляем его по call_Id
-
 def save_tg_entity(tg):
     session = fetch_session(tg.session_name)
     if not session:
