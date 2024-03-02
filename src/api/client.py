@@ -59,8 +59,6 @@ async def get_updates(data: GetUpdatesData):
       #      else:
       #          await tg.client.start(phone=tg.phone)
 
-        me = await tg.client.get_me()
-        print(me)
         response = await tg.get_updates()
         print(response)
         save_tg_entity(tg)
