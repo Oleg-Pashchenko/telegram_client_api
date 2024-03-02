@@ -53,6 +53,10 @@ async def try_auth_with_2fa(data: AuthWith2FAData):
 
 
 async def get_updates(data: GetUpdatesData):
+    try:
+        os.remove(f"{data.session_name}.journal")
+    except:
+        pass
     tg: Tg = get_tg_entity(data.session_name)
     print(tg.phone, tg.secret_password)
     if tg.secret_password:
@@ -66,10 +70,8 @@ async def get_updates(data: GetUpdatesData):
         tg.client._start_reconnect(e)
 
     response = await tg.get_updates()
+    print(response)
     save_tg_entity(tg)
     await tg.client.disconnect()
-    try:
-        os.remove(f"{data.session_name}.journal")
-    except:
-        pass
+
     return response

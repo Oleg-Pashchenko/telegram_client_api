@@ -65,18 +65,16 @@ class Tg:
         answer = {'calls': [], 'messages': []}
         all_groups = await self.client.get_dialogs(limit=50)
 
-        last_message_ids = {d.id: 0 for d in all_groups if d.is_group}
         current_time = datetime.datetime.now(datetime.timezone.utc)
 
         for dialog in all_groups:
             if dialog.is_group:
                 group_id = dialog.id
-                new_messages = await self.client.get_messages(group_id, min_id=last_message_ids[group_id], limit=50)
+                new_messages = await self.client.get_messages(group_id, limit=50)
 
                 if new_messages:
                     for message in reversed(new_messages):
                         time_difference = current_time - message.date
-                        print(message)
                         if isinstance(message.action, MessageActionGroupCall) and not message.action.duration and \
                                 time_difference < datetime.timedelta(minutes=3):
 
@@ -85,5 +83,4 @@ class Tg:
                             answer['calls'].append({'name': dialog.name})
                             database.create_call(message.action.call.id, self.session_name)
                             print(f"Звонок в {dialog.name}")
-                    last_message_ids[group_id] = max(last_message_ids[group_id], message.id)
         return answer
