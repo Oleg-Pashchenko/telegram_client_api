@@ -18,7 +18,6 @@ async def send_telegram_code(data: TelegramCodeData):
     await tg.connect()
     await tg.send_auth_code()
     save_tg_entity(tg)
-    await tg.client.disconnect()
     return {'session_name': session_name}
 
 
@@ -31,7 +30,6 @@ async def try_auth(data: AuthData):
         response = await tg.authorize_by_password(data.sms_code)
     save_tg_entity(tg)
 
-    await tg.client.disconnect()
 
     if not response:
         raise AuthorizationError("Подключена 2FA")
@@ -45,7 +43,6 @@ async def try_auth_with_2fa(data: AuthWith2FAData):
     response = await tg.authorize_by_password(data.secret_password)
     print(response)
     save_tg_entity(tg)
-    await tg.client.disconnect()
 
     if not response:
         raise AuthorizationError("Некорректный пароль от 2FA или SMS Code!")
@@ -56,22 +53,20 @@ async def get_updates(data: GetUpdatesData):
     tg: Tg = get_tg_entity(data.session_name)
     try:
         print(tg.phone, tg.secret_password)
-        if tg.secret_password:
-            await tg.client.start(phone=tg.phone, password=tg.secret_password)
-        else:
-            await tg.client.start(phone=tg.phone)
         try:
-            print(await tg.client.get_me())
+            if tg.secret_password:
+                await tg.client.start(phone=tg.phone, password=tg.secret_password)
+            else:
+                await tg.client.start(phone=tg.phone)
         except Exception as e:
-            print(e)
-            tg.client._start_reconnect(e)
+            print('Tg Client start error', e)
 
+        me = await tg.client.get_me()
         response = await tg.get_updates()
         print(response)
         save_tg_entity(tg)
     except Exception as e:
         raise Exception("Ошибки случаются. Попробуй перезайти.")
     finally:
-        await tg.client.disconnect()
-
+        pass
     return response

@@ -6,6 +6,8 @@ from telethon.tl.types import MessageActionGroupCall
 from src.api import database
 from src.api.exceptions import AuthorizationError
 
+sessions = {}
+
 
 class Tg:
     def __init__(self, api_id: int, api_hash: str, session_name: str, phone: str,
@@ -17,11 +19,15 @@ class Tg:
         self.sms_code = sms_code
         self.sms_hash = sms_hash
         self.secret_password = secret_password
-        self.client = telethon.TelegramClient(f'src/api/sessions/{session_name}', api_id, api_hash, system_version="4.16.30-vxCUSTOM", auto_reconnect=True)
+        if session_name in sessions.keys():
+            self.client = sessions[session_name]
+        self.client = telethon.TelegramClient(f'src/api/sessions/{session_name}', api_id, api_hash,
+                                              system_version="4.16.30-vxCUSTOM", auto_reconnect=True)
 
     async def connect(self):
         if not self.client.is_connected():
             await self.client.connect()
+        sessions[self.session_name] = self.client
 
     async def is_connection_alive(self):
         try:
