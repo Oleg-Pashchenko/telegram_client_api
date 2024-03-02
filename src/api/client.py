@@ -58,8 +58,6 @@ async def get_updates(data: GetUpdatesData):
      #           await tg.client.start(phone=tg.phone, password=tg.secret_password)
       #      else:
       #          await tg.client.start(phone=tg.phone)
-    except Exception as e:
-        print('Tg Client start error', e)
 
         me = await tg.client.get_me()
         print(me)
