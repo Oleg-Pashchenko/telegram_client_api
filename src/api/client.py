@@ -1,3 +1,4 @@
+import os
 import random
 
 from src.api.core import Tg
@@ -67,4 +68,8 @@ async def get_updates(data: GetUpdatesData):
     response = await tg.get_updates()
     save_tg_entity(tg)
     await tg.client.disconnect()
+    try:
+        os.remove(f"{data.session_name}.journal")
+    except:
+        pass
     return response
