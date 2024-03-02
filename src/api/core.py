@@ -68,14 +68,14 @@ class Tg:
 
     async def get_updates(self):
         answer = {'calls': [], 'messages': []}
-        all_groups = await self.client.get_dialogs(limit=50)
+        all_groups = await self.client.get_dialogs(limit=8)
 
         current_time = datetime.datetime.now(datetime.timezone.utc)
 
         for dialog in all_groups:
             if dialog.is_group:
                 group_id = dialog.id
-                new_messages = await self.client.get_messages(group_id, limit=50)
+                new_messages = await self.client.get_messages(group_id, limit=8)
 
                 if new_messages:
                     for message in reversed(new_messages):
