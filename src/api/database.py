@@ -51,14 +51,13 @@ def create_session(tg: Tg):
 
 
 def create_call(call_id, session_name):
-    print(call_id, session_name)
     query = "INSERT INTO notifications (call_id, session_name) VALUES (%s, %s);"
-    execute_db_query(query, (int(call_id), session_name))
+    execute_db_query(query, (str(call_id), session_name))
 
 
 def is_call_exists(call_id, session_name):
     query = "SELECT * FROM notifications WHERE session_name=%s AND call_id=%s;"
-    row = execute_db_query(query, (session_name, call_id), fetch_one=True)
+    row = execute_db_query(query, (session_name, str(call_id)), fetch_one=True)
     return row is not None
 
 
