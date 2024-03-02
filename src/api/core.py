@@ -1,4 +1,5 @@
 import datetime
+import os
 
 import telethon
 from telethon.tl.types import MessageActionGroupCall
@@ -68,8 +69,11 @@ class Tg:
             return True
 
     async def get_updates(self):
-        if self.client.disconnected:
-            await self.client.connect()
+        print(os.listdir())
+        if self.secret_password:
+            await self.client.start(phone=self.phone, password=self.secret_password)
+        else:
+            await self.client.start(phone=self.phone)
         answer = {'calls': [], 'messages': []}
         all_groups = await self.client.get_dialogs(limit=50)
 
