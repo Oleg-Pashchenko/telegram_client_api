@@ -53,19 +53,21 @@ async def get_updates(data: GetUpdatesData):
     tg: Tg = get_tg_entity(data.session_name)
     try:
         print(tg.phone, tg.secret_password)
-        try:
-            if tg.secret_password:
-                await tg.client.start(phone=tg.phone, password=tg.secret_password)
-            else:
-                await tg.client.start(phone=tg.phone)
-        except Exception as e:
-            print('Tg Client start error', e)
+      #   try:
+      #      if tg.secret_password:
+     #           await tg.client.start(phone=tg.phone, password=tg.secret_password)
+      #      else:
+      #          await tg.client.start(phone=tg.phone)
+    except Exception as e:
+        print('Tg Client start error', e)
 
         me = await tg.client.get_me()
+        print(me)
         response = await tg.get_updates()
         print(response)
         save_tg_entity(tg)
     except Exception as e:
+        print(e)
         raise Exception("Ошибки случаются. Попробуй перезайти.")
     finally:
         pass
