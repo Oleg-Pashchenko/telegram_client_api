@@ -51,8 +51,9 @@ def create_session(tg: Tg):
 
 
 def create_call(call_id, session_name):
+    print(call_id, session_name)
     query = "INSERT INTO notifications (call_id, session_name) VALUES (%s, %s);"
-    execute_db_query(query, (call_id, session_name))
+    execute_db_query(query, (int(call_id), session_name))
 
 
 def is_call_exists(call_id, session_name):

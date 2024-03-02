@@ -77,7 +77,7 @@ class Tg:
                         time_difference = current_time - message.date
                         if isinstance(message.action, MessageActionGroupCall) and not message.action.duration and \
                                 time_difference < datetime.timedelta(minutes=3):
-
+                            print('Call founded')
                             if database.is_call_exists(message.id, self.session_name):
                                 continue
                             answer['calls'].append({'name': dialog.name})

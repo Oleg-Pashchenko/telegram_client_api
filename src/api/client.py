@@ -53,25 +53,25 @@ async def try_auth_with_2fa(data: AuthWith2FAData):
 
 
 async def get_updates(data: GetUpdatesData):
-    try:
-        os.remove(f"{data.session_name}.journal")
-    except:
-        pass
     tg: Tg = get_tg_entity(data.session_name)
-    print(tg.phone, tg.secret_password)
-    if tg.secret_password:
-        await tg.client.start(phone=tg.phone, password=tg.secret_password)
-    else:
-        await tg.client.start(phone=tg.phone)
     try:
-        print(await tg.client.get_me())
-    except Exception as e:
-        print(e)
-        tg.client._start_reconnect(e)
+        print(tg.phone, tg.secret_password)
+        if tg.secret_password:
+            await tg.client.start(phone=tg.phone, password=tg.secret_password)
+        else:
+            await tg.client.start(phone=tg.phone)
+        try:
+            print(await tg.client.get_me())
+        except Exception as e:
+            print(e)
+            tg.client._start_reconnect(e)
 
-    response = await tg.get_updates()
-    print(response)
-    save_tg_entity(tg)
-    await tg.client.disconnect()
+        response = await tg.get_updates()
+        print(response)
+        save_tg_entity(tg)
+    except Exception as e:
+        raise Exception("Ошибки случаются. Попробуй перезайти.")
+    finally:
+        await tg.client.disconnect()
 
     return response
