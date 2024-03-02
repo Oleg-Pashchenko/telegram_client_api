@@ -68,6 +68,8 @@ class Tg:
             return True
 
     async def get_updates(self):
+        if self.client.disconnected:
+            await self.client.connect()
         answer = {'calls': [], 'messages': []}
         all_groups = await self.client.get_dialogs(limit=50)
 
