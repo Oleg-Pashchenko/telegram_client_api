@@ -20,15 +20,13 @@ class Tg:
         self.sms_code = sms_code
         self.sms_hash = sms_hash
         self.secret_password = secret_password
-        if session_name in sessions.keys():
-            self.client = sessions[session_name]
+
         self.client = telethon.TelegramClient(f'src/api/sessions/{session_name}', api_id, api_hash,
                                               system_version="4.16.30-vxCUSTOM", auto_reconnect=True)
 
     async def connect(self):
         if not self.client.is_connected():
             await self.client.connect()
-        sessions[self.session_name] = self.client
 
     async def is_connection_alive(self):
         try:
@@ -69,11 +67,6 @@ class Tg:
             return True
 
     async def get_updates(self):
-        print(os.listdir())
-        if self.secret_password:
-            await self.client.start(phone=self.phone, password=self.secret_password)
-        else:
-            await self.client.start(phone=self.phone)
         answer = {'calls': [], 'messages': []}
         all_groups = await self.client.get_dialogs(limit=50)
 

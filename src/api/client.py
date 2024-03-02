@@ -1,7 +1,7 @@
 import os
 import random
 
-from src.api.core import Tg
+from src.api.core import Tg, sessions
 from src.api.database import get_tg_entity, save_tg_entity
 from src.api.exceptions import AuthorizationError
 from src.validators import TelegramCodeData, AuthData, AuthWith2FAData, GetUpdatesData
@@ -30,9 +30,15 @@ async def try_auth(data: AuthData):
         response = await tg.authorize_by_password(data.sms_code)
     save_tg_entity(tg)
 
-
     if not response:
         raise AuthorizationError("Подключена 2FA")
+
+    if tg.secret_password:
+        await tg.client.start(phone=tg.phone, password=tg.secret_password)
+    else:
+        await tg.client.start(phone=tg.phone)
+    sessions[tg.session_name] = tg
+
     return response
 
 
@@ -51,14 +57,8 @@ async def try_auth_with_2fa(data: AuthWith2FAData):
 
 async def get_updates(data: GetUpdatesData):
     tg: Tg = get_tg_entity(data.session_name)
+    tg = sessions[tg.session_name]
     try:
-        print(tg.phone, tg.secret_password)
-      #   try:
-      #      if tg.secret_password:
-     #           await tg.client.start(phone=tg.phone, password=tg.secret_password)
-      #      else:
-      #          await tg.client.start(phone=tg.phone)
-
         response = await tg.get_updates()
         print(response)
         save_tg_entity(tg)
@@ -66,5 +66,5 @@ async def get_updates(data: GetUpdatesData):
         print(e)
         raise Exception("Ошибки случаются. Попробуй перезайти.")
     finally:
-        pass
+        sessions[tg.session_name] = tg
     return response
